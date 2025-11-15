@@ -1,6 +1,6 @@
 "use client";
 
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button } from "@heroui/react";
+import Link from "next/link";
 import { ThemeToggle } from "./ThemeToggle";
 import { usePathname } from "next/navigation";
 
@@ -16,34 +16,42 @@ export function NavBar() {
   ];
 
   return (
-    <Navbar isBordered maxWidth="full">
-      <NavbarBrand>
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-lg">O</span>
+    <nav className="border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950">
+      <div className="max-w-full px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          {/* Logo */}
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-400 rounded-lg flex items-center justify-center shadow-sm">
+              <span className="text-white font-bold text-lg">O</span>
+            </div>
+            <span className="font-bold text-xl text-gray-900 dark:text-white">
+              Onyx CashFlow
+            </span>
           </div>
-          <p className="font-bold text-xl">Onyx CashFlow</p>
+
+          {/* Navigation Links */}
+          <div className="hidden sm:flex items-center gap-6">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`text-sm font-medium transition-colors hover:text-blue-600 dark:hover:text-blue-400 ${
+                  pathname === item.href
+                    ? "text-blue-600 dark:text-blue-400"
+                    : "text-gray-600 dark:text-gray-400"
+                }`}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
+
+          {/* Theme Toggle */}
+          <div className="flex items-center">
+            <ThemeToggle />
+          </div>
         </div>
-      </NavbarBrand>
-
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        {navItems.map((item) => (
-          <NavbarItem key={item.href} isActive={pathname === item.href}>
-            <Link
-              color={pathname === item.href ? "primary" : "foreground"}
-              href={item.href}
-            >
-              {item.label}
-            </Link>
-          </NavbarItem>
-        ))}
-      </NavbarContent>
-
-      <NavbarContent justify="end">
-        <NavbarItem>
-          <ThemeToggle />
-        </NavbarItem>
-      </NavbarContent>
-    </Navbar>
+      </div>
+    </nav>
   );
 }

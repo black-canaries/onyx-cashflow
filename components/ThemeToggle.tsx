@@ -2,7 +2,6 @@
 
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import { Button } from "@heroui/react";
 
 export function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
@@ -13,19 +12,14 @@ export function ThemeToggle() {
   }, []);
 
   if (!mounted) {
-    return (
-      <Button isIconOnly variant="light" aria-label="Toggle theme">
-        <span className="w-5 h-5" />
-      </Button>
-    );
+    return <div className="w-9 h-9" />;
   }
 
   return (
-    <Button
-      isIconOnly
-      variant="light"
+    <button
+      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
       aria-label="Toggle theme"
-      onPress={() => setTheme(theme === "dark" ? "light" : "dark")}
     >
       {theme === "dark" ? (
         <svg
@@ -56,6 +50,6 @@ export function ThemeToggle() {
           />
         </svg>
       )}
-    </Button>
+    </button>
   );
 }

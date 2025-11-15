@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { Card, CardHeader, CardBody, Divider } from "@heroui/react";
+import { Card, Metric, Text } from "@tremor/react";
 import { BalanceChart } from "./BalanceChart";
 import { TransactionList } from "./TransactionList";
 import { TimePeriodSelector } from "./TimePeriodSelector";
@@ -89,8 +89,8 @@ export function Dashboard() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-default-500">Loading dashboard...</p>
+          <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-500 dark:text-gray-400">Loading dashboard...</p>
         </div>
       </div>
     );
@@ -101,8 +101,8 @@ export function Dashboard() {
       {/* Header with summary stats */}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Dashboard</h1>
-          <p className="text-default-500 mt-1">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-1">
             Track your finances and forecast future balances
           </p>
         </div>
@@ -110,35 +110,25 @@ export function Dashboard() {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
-          <CardBody className="py-4">
-            <p className="text-sm text-default-500">Total Income</p>
-            <p className="text-2xl font-bold text-success">
-              ${summary.totalIncome.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </p>
-          </CardBody>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Card decoration="top" decorationColor="green">
+          <Text>Total Income</Text>
+          <Metric className="text-green-600">
+            ${summary.totalIncome.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+          </Metric>
         </Card>
-        <Card>
-          <CardBody className="py-4">
-            <p className="text-sm text-default-500">Total Expenses</p>
-            <p className="text-2xl font-bold text-danger">
-              ${summary.totalExpenses.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </p>
-          </CardBody>
+        <Card decoration="top" decorationColor="red">
+          <Text>Total Expenses</Text>
+          <Metric className="text-red-600">
+            ${summary.totalExpenses.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+          </Metric>
         </Card>
-        <Card>
-          <CardBody className="py-4">
-            <p className="text-sm text-default-500">Net Change</p>
-            <p
-              className={`text-2xl font-bold ${
-                summary.netChange >= 0 ? "text-success" : "text-danger"
-              }`}
-            >
-              {summary.netChange >= 0 ? "+" : ""}$
-              {summary.netChange.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </p>
-          </CardBody>
+        <Card decoration="top" decorationColor={summary.netChange >= 0 ? "green" : "red"}>
+          <Text>Net Change</Text>
+          <Metric className={summary.netChange >= 0 ? "text-green-600" : "text-red-600"}>
+            {summary.netChange >= 0 ? "+" : ""}$
+            {summary.netChange.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+          </Metric>
         </Card>
       </div>
 
@@ -146,48 +136,36 @@ export function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Chart - Takes 2 columns */}
         <Card className="lg:col-span-2">
-          <CardHeader className="flex justify-between items-center">
-            <div>
-              <h2 className="text-xl font-semibold">Balance Trend</h2>
-              <p className="text-sm text-default-500">
-                Historical data (solid) and forecasts (dotted)
-              </p>
-            </div>
-          </CardHeader>
-          <Divider />
-          <CardBody>
-            <div className="h-[500px]">
-              <BalanceChart
-                transactions={filteredData.filteredTransactions}
-                predictions={filteredData.filteredPredictions}
-                timePeriod={timePeriod}
-                initialBalance={3000}
-              />
-            </div>
-          </CardBody>
+          <div className="mb-4">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Balance Trend</h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Historical data (solid) and forecasts (dotted)
+            </p>
+          </div>
+          <div className="h-[500px]">
+            <BalanceChart
+              transactions={filteredData.filteredTransactions}
+              predictions={filteredData.filteredPredictions}
+              timePeriod={timePeriod}
+              initialBalance={3000}
+            />
+          </div>
         </Card>
 
         {/* Transaction List - Takes 1 column */}
         <Card>
-          <CardHeader>
-            <div>
-              <h2 className="text-xl font-semibold">Transactions</h2>
-              <p className="text-sm text-default-500">
-                {transactions.length + allPredictions.length} total
-              </p>
-            </div>
-          </CardHeader>
-          <Divider />
-          <CardBody className="p-0">
-            <div className="p-4">
-              <TransactionList
-                transactions={filteredData.filteredTransactions}
-                predictions={filteredData.filteredPredictions}
-                categories={categories}
-                height="465px"
-              />
-            </div>
-          </CardBody>
+          <div className="mb-4">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Transactions</h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              {transactions.length + allPredictions.length} total
+            </p>
+          </div>
+          <TransactionList
+            transactions={filteredData.filteredTransactions}
+            predictions={filteredData.filteredPredictions}
+            categories={categories}
+            height="465px"
+          />
         </Card>
       </div>
     </div>

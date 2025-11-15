@@ -1,6 +1,5 @@
 "use client";
 
-import { Button, ButtonGroup } from "@heroui/react";
 import type { TimePeriod } from "@/lib/types";
 
 interface TimePeriodSelectorProps {
@@ -19,17 +18,20 @@ const periods: { value: TimePeriod; label: string }[] = [
 
 export function TimePeriodSelector({ selected, onChange }: TimePeriodSelectorProps) {
   return (
-    <ButtonGroup size="sm" variant="flat">
+    <div className="inline-flex rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-1">
       {periods.map((period) => (
-        <Button
+        <button
           key={period.value}
-          color={selected === period.value ? "primary" : "default"}
-          variant={selected === period.value ? "solid" : "flat"}
-          onPress={() => onChange(period.value)}
+          onClick={() => onChange(period.value)}
+          className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
+            selected === period.value
+              ? "bg-blue-600 text-white"
+              : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
+          }`}
         >
           {period.label}
-        </Button>
+        </button>
       ))}
-    </ButtonGroup>
+    </div>
   );
 }
